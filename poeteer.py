@@ -3,34 +3,12 @@
 import sqlite3
 import re
 import random
+import sys
 
 import create_database
+import poemfile
 
 _debug = False
-
-class Rhymeschemes:
-    # limerick = [(create_specifier_line("010010010"),	'A'),
-    #             (create_specifier_line("010010010"),	'A'),
-    #             (create_specifier_line("010010"),	'B'),
-    #             (create_specifier_line("010010"),	'B'),
-    #             (create_specifier_line("010010010"),	'A')]
-
-    limerick = [("010010010",	'A'),
-                ("010010010",	'A'),
-                ("010010",	'B'),
-                ("010010",	'B'),
-                ("010010010",	'A')]
-
-    # def create_specifier_line(stress_pattern):
-    #     l = []
-    #     for c in stress_pattern:
-    #         if c == '0':
-    #             l.append(False)
-    #         elif c == '1':
-    #             l.append(True)
-    #         else:
-    #             raise Exception("Unknown stress #"+c)
-    #     return l
 
 def debug_print(s):
     if _debug:
@@ -87,10 +65,18 @@ def generate(cursor,specifier):
     return poem
 
 if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print "Usage: poeteer.py poemfile"
+        exit(1)
+
+    # Get the specifier before initializing the database, since that's so slow,
+    # and it's good to just let the user know if they have a bad file
+    specifier = poemfile.get_specifier(sys.argv[1])
+
     print "Initializing database...."
     conn = create_database.create(':memory:')
     print "Done initializing."
     
     c = conn.cursor()
 
-    print generate(c,Rhymeschemes.limerick)
+    print generate(c,specifier)
