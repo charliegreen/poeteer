@@ -8,7 +8,7 @@ import sys
 import create_database
 import poemfile
 
-_debug = False
+_debug = True
 
 def debug_print(s):
     if _debug:
@@ -50,8 +50,9 @@ def generate(cursor,specifier):
                     line  += mword+" "
                     sylli += mnsylls
 
-                    if mnsylls == 0:
-                        print "!!WARN!! match has no syllables: "+str(match)
+                    # This shouldn't be necessary
+                    # if mnsylls == 0:
+                    #     print "!!WARN!! match has no syllables: "+str(match)
 
                     break        
                 else:
